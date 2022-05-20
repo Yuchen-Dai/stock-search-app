@@ -1,0 +1,24 @@
+
+<ul ngbNav #nav="ngbNav" class="nav-tabs blue">
+
+  <li class = "me-auto">
+    <div class = "title"> {{title}}</div>
+  </li>
+
+  <li ngbNavItem>
+    <a ngbNavLink class="rounded-pill blue white_text search">Search</a>
+    <ng-template ngbNavContent>First content</ng-template>
+  </li>
+
+  <li ngbNavItem>
+    <a ngbNavLink class="rounded-pill blue white_text">Watchlist</a>
+    <ng-template ngbNavContent>Second content</ng-template>
+  </li>
+
+  <li ngbNavItem>
+    <a ngbNavLink class="rounded-pill blue white_text ">Portfolio</a>
+    <ng-template ngbNavContent>Third content</ng-template>
+  </li>
+
+</ul>
+<div [ngbNavOutlet]="nav"></div>

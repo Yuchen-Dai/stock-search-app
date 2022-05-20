@@ -1,0 +1,53 @@
+
+.main_body{
+	padding-left: 0px;
+	padding-right: 0px;
+	background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 96vh;
+    background-image: url("../assets/img/background-graph.jpg");
+    background-attachment: fixed;
+
+}
+
+
+.site-footer{
+	height: 4vh;
+	text-align:center;
+	font-weight: bolder;
+	padding-top: 1vh;
+	background: lightgrey;
+	white-space: nowrap;
+}
+
+.blue_text{
+	color: royalblue;
+}
+
+.blue{
+	background: #1E1F9E !important;
+}
+
+
+.search{
+	border: 0px;
+}
+
+.title{
+	color: white;
+	font-size: 150%;
+	padding-left: 10%;
+	padding-top: 0.3em;
+	white-space:nowrap;
+	font-weight: lighter;
+}
+
+.nav-tabs{
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+* {
+	font-family: Arial, Helvetica, sans-serif;
+}
+

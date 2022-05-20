@@ -1,0 +1,98 @@
+.title {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: 700;
+	font-size: 3em;
+	text-align: center;
+	margin-top: 5vh;
+}
+
+.form-group {
+	margin: 0;
+	position: absolute;
+	width: 25em;
+	left: 50%;
+	top: 18em;
+	transform: translate(-50%, -50%);
+	border-width: 1em !important;
+	border-color: #1E1F9E !important;
+	border-radius: 25px;
+}
+
+input {
+ 	box-shadow: none;
+	border-radius: 25px;
+	border-color: #1E1F9E;
+	font-size: small;
+	border-width: 0.3em;
+}
+
+input:focus{
+	box-shadow: none;
+	outline: none;
+	border-color: #1E1F9E;
+}
+
+.sub {
+	position: absolute;
+	top: 0.05em;
+	right: 0.8em;
+	border-style: none;
+}
+
+.bi-search {
+	margin-right: 2em;
+	margin-top: 0.5em;
+}
+
+.bi-x-lg{
+	margin-top: 0.5em;
+}
+
+#search-result{
+	margin-left: 15%;
+	margin-right: 15%;
+	margin-top: 20vh;
+}
+
+.alert_style{
+	margin-left: 15%;
+	margin-right: 15%;
+}
+
+.grey{
+	color: grey;
+}
+
+a{
+	text-decoration: none;
+} 
+
+.company_summary{
+	text-align: left;
+	white-space: nowrap;
+}
+
+
+.row{
+    overflow: hidden; 
+}
+
+.news_img{
+	height: 100%;
+	width: 100%;
+}
+
+.card-horizontal {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.img-square-wrapper{
+    width: 40%;
+    height: 5vw;
+    object-fit: cover;
+}
+
+.star{
+	;
+}

@@ -1,0 +1,60 @@
+<div class = 'content'>
+	<ngb-alert #selfClosingAlert class="alert_style" *ngIf="danger_message" type="danger" (closed)="danger_message = ''" style = "margin-top: 5vh;">{{ danger_message }}</ngb-alert>
+    <ngb-alert #selfClosingAlert class="alert_style" *ngIf="success_message" type="success" (closed)="success_message = ''" style = "margin-top: 5vh;">{{ success_message }}</ngb-alert>
+	<div class = "title">My Portfolio</div>
+	<div class = "money">Money in Wallet: ${{money.toFixed(2)}}</div>
+	<ngb-alert *ngIf= "!watch_list.length" type = 'warning' [dismissible]="false" style = "margin:0 auto;margin-top: 5vh;text-align: center;">{{error_message}}</ngb-alert>
+	<div *ngIf='watch_list.length' style = "margin:0 auto;margin-top: 10vh;">
+		<div class='row row-cols-1'>
+			<div class = 'col' *ngFor="let ticker of watch_list; let i=index;">
+				
+				<div class="card">
+                    <div class = "card-header" style= "transform: rotate(0);">
+                    	<span class = "display-6"><strong>{{ticker['ticker']}} </strong></span> <span class = 'h4' style="color: grey">{{ticker['name']}}</span>
+                    	<button class="stretched-link" [id] ='"ticker_"+ i' style="background-color:transparent; border-width:0em;" (click)="go($event)"></button>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                        	<tbody class = 'h4'>
+							  <tr>
+							    <td>Quantity:</td>
+							    <td style="text-align: right">{{roundNum(port['stocks'][ticker['ticker']])}}</td>
+							    <td>Change:</td>
+							    <td style="text-align: right" [ngStyle] = "{'color': getStatusColor(i)}">
+							    	<svg *ngIf = "getChange(i)>0"xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill = 'green' class="bi bi-triangle-fill" viewBox="0 0 16 16">
+					                    <path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+					                </svg>
+					                <svg *ngIf = "getChange(i) < 0" xmlns= "http://www.w3.org/2000/svg" width="16" height="16" fill = 'red' class="bi bi-triangle-fill" viewBox="0 0 16 16" style='transform: rotate(-180deg);'>
+					                    <path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+					                </svg>
+							    	{{roundNum(getChange(i))}}
+								</td>
+							  </tr>
+							  <tr>
+							    <td>Avg. Cost / Share:</td>
+							    <td style="text-align: right" >{{roundNum(port['price'][ticker['ticker']]/port['stocks'][ticker['ticker']])}}</td>
+							    <td>Current Price:</td>
+							    <td style="text-align: right" [ngStyle] = "{'color': getStatusColor(i)}">{{roundNum(watch_list[i]['c'])}}</td>
+							  </tr>
+							  <tr>
+							    <td>Total Cost:</td>
+							    <td style="text-align: right">{{roundNum(port['price'][ticker['ticker']])}}</td>
+							    <td>Market Value:</td>
+							    <td style="text-align: right" [ngStyle] = "{'color': getStatusColor(i)}">{{roundNum(watch_list[i]['c']*port['stocks'][ticker['ticker']])}}</td>
+							  </tr>
+							</tbody>
+                        </table>
+                    </div>
+                    <div class = "card-footer" style="text-align: right" >
+                    	<button (click)='buy(i)' class = 'btn btn-success'>
+		                    <span>Buy</span>
+		                </button>
+		                <button  (click)='sell(i)' class = 'btn btn-danger'>
+		                    <span>Sell</span>
+		                </button>
+                    </div>
+	            </div>
+			</div>
+		</div>
+	</div>
+</div>

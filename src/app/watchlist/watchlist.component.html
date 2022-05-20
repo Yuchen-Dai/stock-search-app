@@ -1,0 +1,38 @@
+<div class = 'content'>
+	<div class = "title">My Watchlist</div>
+	<ngb-alert *ngIf= "watch_list.length == 0" type = 'warning' [dismissible]="false" style = "margin:0 auto;margin-top: 10vh;text-align: center;">{{error_message}}</ngb-alert>
+	<mat-spinner *ngIf='isloading' diameter="50" style = "margin:0 auto;margin-top: 10vh;" mode = 'indeterminate'></mat-spinner>
+	<div *ngIf='!isloading' style = "margin:0 auto;margin-top: 10vh;">
+		<p *ngFor="let ticker of watch_list; let i=index;">
+		  <ngb-alert type="light" class="border border-1" (closed)="close(ticker)">
+		  	<div class="row row-cols-6">
+            	<div class='col'>
+            		<div><h1>{{ticker['ticker']}}</h1></div>
+            		<div><h2>{{ticker['name']}}</h2></div>
+            	</div>
+            	<div class='col'>
+            	</div>
+            	<div class='col'>
+            	</div>
+            	<div class='col'>
+            	</div>
+            	<div class='col-1'>
+            	</div>
+            	<div class='col-3'>
+		            <div class = "h2 text-end"[ngStyle] = "{'color': getColor(ticker['d'])}"><strong>{{roundNum(ticker['c'])}}</strong></div>
+		            <div class = 'h4 text-end' [ngStyle] = "{'color': getColor(ticker['d'])}">
+		                <svg *ngIf = "getColor(ticker['d'])=='green'"xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill = 'green' class="bi bi-triangle-fill" viewBox="0 0 16 16">
+		                    <path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+		                </svg>
+		                <svg *ngIf = "getColor(ticker['d'])=='red'" xmlns= "http://www.w3.org/2000/svg" width="16" height="16" fill = 'red' class="bi bi-triangle-fill" viewBox="0 0 16 16" style='transform: rotate(-180deg);'>
+		                    <path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+		                </svg>
+		                {{roundNum(ticker['d'])}}({{roundNum(ticker['dp'])}}%)
+		            </div>
+            	</div>
+            </div>
+            <button class="stretched-link" [id] ='"ticker_"+ i' style="background-color:transparent; border-width:0em;" (click)="go($event)"></button>
+		  </ngb-alert>
+		</p>
+	</div>
+</div>

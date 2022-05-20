@@ -1,0 +1,25 @@
+
+.blue{
+	background: #1E1F9E !important;
+}
+
+.white_text{
+	color: grey !important;
+}
+
+.search{
+	border: 0px;
+}
+
+.title{
+	color: white;
+	font-size: 150%;
+	padding-left: 10%;
+	white-space:nowrap;
+	font-weight: lighter;
+}
+
+.nav-tabs{
+	padding-top: 5px;
+	padding-bottom: 5px;
+}

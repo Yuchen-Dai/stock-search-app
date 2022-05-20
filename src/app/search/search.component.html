@@ -1,0 +1,252 @@
+<div id="fb-root"></div>
+<!-- <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&version=v13.0" nonce="TwkINmSL"></script>
+<script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script> -->
+<div class = "title">Stock Search</div>
+
+<form>
+    <div class="form-group">
+        <input type="text" class="form-control" id="ticker" placeholder="Enter stock ticker symbol" [formControl]="fc" [matAutocomplete]="auto">
+        <mat-autocomplete class="matAutocomplete" #auto="matAutocomplete" [panelWidth]="190">
+            <mat-option *ngIf="loading && (inputTxt!=='')">
+                <mat-spinner diameter="20"></mat-spinner>
+            </mat-option>
+            <div *ngIf="!loading && inputTxt">
+                <mat-option *ngFor="let option of autoTxt" [value]="option" (click)='onSubmit($event)' [value]="option?.symbol">
+                    <span>{{ option?.symbol }}</span><span style="font-size: small;">| {{ option?.description }}</span>
+                </mat-option>
+            </div>
+        </mat-autocomplete>
+        <button (click)='onSubmit($event)' class="mat-button sub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1E1F9E" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+        </button>
+        <button (click)='clear($event)' class="mat-button sub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#1E1F9E" class="bi bi-x-lg" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+              <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+            </svg>
+        </button>
+    </div>
+</form>
+
+
+
+<!-- loading -->
+<mat-spinner *ngIf="loading_content" diameter="50" style = "margin:0 auto;margin-top: 20vh;" mode = 'indeterminate'></mat-spinner>
+
+<!-- error -->
+<ngb-alert *ngIf= "display_error" type = 'danger' [dismissible]="error_dismissible" style = "margin:0 auto;margin-top: 20vh;text-align: center;margin-left: 15%;margin-right: 15%;">{{error_message}}</ngb-alert>
+
+<div id = 'search-result' class = 'w-responsive text-center mx-auto' *ngIf="display_content">
+    
+    
+
+    <!-- alert -->
+    <ngb-alert #selfClosingAlert class="alert_style" *ngIf="danger_message" type="danger" (closed)="danger_message = ''">{{ danger_message }}</ngb-alert>
+    <ngb-alert #selfClosingAlert class="alert_style" *ngIf="success_message" type="success" (closed)="success_message = ''">{{ success_message }}</ngb-alert>
+
+
+
+    <div class="container">
+      <div class="row row-cols-3">
+        <div class="col text-start">
+            <div class = "h1">
+                <strong>{{comp_description.ticker}}</strong>
+                <button (click)='switch_archive(this.ticker)' class = 'mat-button border-0 star'>
+                    <svg *ngIf="!isArchive" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                    </svg>
+                    <svg *ngIf="isArchive" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="yellow" class="bi bi-star-fill" viewBox="0 0 16 16">
+                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class = "h2 grey">{{comp_description.name}}</div>
+            <div >{{comp_description.exchange}}</div>
+            <div>
+                <button (click)='buy(this.ticker)' class = 'btn btn-success'>
+                    <span>Buy</span>
+                </button>
+                <button *ngIf="this.num_stocks" (click)='sell(this.ticker)' class = 'btn btn-danger'>
+                    <span>Sell</span>
+                </button>
+            </div>
+        </div>
+        <div class="col">
+            <img src={{comp_description.logo}} class="img-fluid">
+            <div [ngStyle] = "{'color': getStatusColor()}" style = "margin-top: 6vh; margin-bottom: 2vh"><strong>{{getMarketStatus()}}</strong></div>
+        </div>
+        <div class="col text-end">
+            <div class = "h1" [ngStyle] = "{'color': getColor()}"><strong>{{roundNum(comp_latest.c)}}</strong></div>
+            <div class = 'h2' [ngStyle] = "{'color': getColor()}">
+                <svg *ngIf = "getColor()=='green'"xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill = 'green' class="bi bi-triangle-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+                </svg>
+                <svg *ngIf = "getColor()=='red'" xmlns= "http://www.w3.org/2000/svg" width="16" height="16" fill = 'red' class="bi bi-triangle-fill" viewBox="0 0 16 16" style='transform: rotate(-180deg);'>
+                    <path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+                </svg>
+                {{roundNum(comp_latest.d)}}({{roundNum(comp_latest.dp)}}%)
+            </div>
+            <div>{{getDate(this.comp_latest['t'])}}</div>
+        </div>
+        <div class="col-12">
+            <ul ngbNav #nav="ngbNav" class="nav-tabs" [animation] = true>
+
+                <li ngbNavItem class = 'w-25'>
+                  <a ngbNavLink>Summary</a>
+                  <ng-template ngbNavContent>
+                    <div class="row row-cols-2">
+                        <div class='col-3'>
+                            <br>
+                            <div><strong>High Price: </strong>{{roundNum(comp_latest.h)}}</div>
+                            <div><strong>Low Price: </strong>{{roundNum(comp_latest.l)}}</div>
+                            <div><strong>Open Price:</strong>{{roundNum(comp_latest.o)}}</div>
+                            <div><strong>Prev. Close:</strong>{{roundNum(comp_latest.pc)}}</div>
+                            <br><br>
+                            <div class = 'h4'><u>About the company</u></div><br>
+                            <div class="company_summary"><strong>IPO Start Date: </strong>{{comp_description.ipo}}</div><br>
+                            <div class="company_summary"><strong>Industry: </strong>{{comp_description.finnhubIndustry}}</div><br>
+                            <div class="company_summary"><strong>Webpage: </strong> <a [href] = "comp_description.weburl" target="_blank">{{comp_description.weburl}}</a></div><br>
+                            <div class="company_summary"><strong>Company peers: </strong></div><br>
+                            <!-- <div class="company_summary"><span  *ngFor="let peer of comp_peers"><a routerLink='../../ticker/{{peer}}'>{{peer}}, </a></span> </div> -->
+
+                        </div>
+                        <div class='col-3'>
+                        </div>
+                        <div class='col-6'>
+                            <highcharts-chart 
+                              [Highcharts]="Highcharts"
+                              [constructorType]="chartConstructor"
+                              [options]="chartOptions"
+                              [callbackFunction]="chartCallback"
+                              [(update)]="updateFlag"
+                              [oneToOne]="oneToOneFlag"
+                              [runOutsideAngular]="runOutsideAngularFlag"
+                              style="width: 100%; display: block;"
+                            ></highcharts-chart>
+                        </div>
+                    </div>
+                  </ng-template>
+                </li>
+
+                <li ngbNavItem class = 'w-25'>
+                  <a ngbNavLink >Top News</a>
+                  <ng-template ngbNavContent>
+                    <div class='row row-cols-2 '>
+                        <div class = 'col p-3 my-auto' *ngFor="let new of comp_news; let indexOfelement=index;">
+                            <div class="card p-5">
+                                <div class="card-horizontal">
+                                    <div class="img-square-wrapper">
+                                        <img class="news_img" [src] = 'new["image"]' alt="Card image cap">
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text text-start">{{new["headline"]}}</p>
+                                    </div>
+
+                                </div>
+                                <!-- hidden button -->
+                                <button class="stretched-link" [id] ='"news_"+ indexOfelement' style="background-color:transparent; border-width:0em;" (click)="openModal($event)"></button>
+                                <!-- Modal -->
+
+                            </div>
+                        </div>
+                    </div>
+                  </ng-template>
+                </li>
+
+                <li ngbNavItem class = 'w-25'> 
+                  <a ngbNavLink >Charts</a>
+                  <ng-template ngbNavContent>
+                      <highcharts-chart
+                          [Highcharts]="Highcharts"
+                          [constructorType]="chartConstructor"
+                          [options]="chartOptions2"
+                          [callbackFunction]="chartCallback"
+                          [(update)]="updateFlag2"
+                          [oneToOne]="oneToOneFlag"
+                          [runOutsideAngular]="runOutsideAngularFlag"
+                          style="width: 100%; display: block;"
+                        ></highcharts-chart>
+                  </ng-template>
+                </li>
+
+                <li ngbNavItem class = 'w-25'>
+                  <a ngbNavLink >Insights</a>
+                  <ng-template ngbNavContent>
+                    <div class = 'row row-cols'>
+                        <div class = 'col-3'></div>
+                        <div class = 'col-6'>
+                            <div class = 'h3'>Social Sentiment</div>
+                            <table class="table">
+                            <tbody>
+                              <tr>
+                                <th class="table-secondary">{{comp_description.name}}</th>
+                                <th class="table-secondary">Reddit</th>
+                                <th class="table-secondary">Twitter</th>
+                              </tr>
+                              <tr>
+                                <th scope="row" class="table-secondary">Total Mentions</th>
+                                <td>
+                                    {{comp_sentiment['reddit'][0]['mention']}}
+                                </td>
+                                <td>
+                                    {{comp_sentiment['twitter'][0]['mention']}}
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row" class="table-secondary">Positive Mentions</th>
+                                <td>
+                                    {{comp_sentiment['reddit'][0]['positiveMention']}}
+                                </td>
+                                <td>
+                                    {{comp_sentiment['twitter'][0]['positiveMention']}}
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row" class="table-secondary">Negative Mentions</th>
+                                <td>
+                                    {{comp_sentiment['reddit'][0]['negativeMention']}}
+                                </td>
+                                <td>
+                                    {{comp_sentiment['twitter'][0]['negativeMention']}}
+                                </td>
+                              </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                        <div class = 'col-3'></div>
+                        <div class = 'col col-6'>
+                            <highcharts-chart 
+                              [Highcharts]="Highcharts"
+                              [constructorType]="chartConstructor2"
+                              [options]="chartOptions3"
+                              [callbackFunction]="chartCallback"
+                              [(update)]="updateFlag3"
+                              [oneToOne]="oneToOneFlag"
+                              [runOutsideAngular]="runOutsideAngularFlag"
+                              style="width: 100%; display: block;"
+                            ></highcharts-chart>
+                        </div>
+                        <div class = 'col col-6'>
+                            <highcharts-chart 
+                              [Highcharts]="Highcharts"
+                              [constructorType]="chartConstructor2"
+                              [options]="chartOptions4"
+                              [callbackFunction]="chartCallback"
+                              [(update)]="updateFlag4"
+                              [oneToOne]="oneToOneFlag"
+                              [runOutsideAngular]="runOutsideAngularFlag"
+                              style="width: 100%; display: block;"
+                            ></highcharts-chart>
+                        </div>
+                    </div>
+                  </ng-template>
+                </li>
+            </ul>
+            <div [ngbNavOutlet]="nav"></div>
+        </div>
+
+      </div>
+    
+</div>
