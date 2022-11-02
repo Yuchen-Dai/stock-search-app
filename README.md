@@ -101,7 +101,7 @@ Install Angular CLI
 
 1. Clone the repo
  ```sh
- git clone https://github.com/Yuchen-Dai/stock-search-android.git
+ git clone https://github.com/Yuchen-Dai/stock-search-web.git
  ```
 2. Run
 ```sh
