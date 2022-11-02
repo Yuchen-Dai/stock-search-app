@@ -97,21 +97,17 @@ Install Angular CLI
   ```sh
   npm install -g @angular/cli
   ```
-  
-### Development server
-Run
-  ```sh
-  ng serve
-  ```
+### Installation
+
+1. Clone the repo
+ ```sh
+ git clone https://github.com/Yuchen-Dai/stock-search-android.git
+ ```
+2. Run
+```sh
+ng serve
+```
 Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-### Build
-
-Run
-  ```sh
-  ng build
-  ```
-to build the project. The build artifacts will be stored in the `dist/` directory.
 
 
 <!-- CONTRIBUTING -->
